@@ -2,7 +2,7 @@
 
 namespace virtualpetsoop
 {
-    interface RealTimeComponent
+    interface IRealTimeComponent
     {
         void Initialise();
         void Update();

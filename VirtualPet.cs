@@ -1,59 +1,77 @@
 using System;
+using System.Threading;
 namespace virtualpetsoop
 {
-    public class VirtualPet:RealTimeComponent
+    public class VirtualPet:IRealTimeComponent
     {
-        private readonly PetClass petClass;
+        public  PetClass petClass;
         public string Name {get;set;}
         int  startHunger;
         int hunger;
         int startMood;
+        int startHealth;
+        int health;
+        public int Mood
+        {
+            get{return startMood;}
+            set {startMood=value;}
+        }
+         public int Hunger
+        {
+            get{return startHunger;}
+            set {startHunger=value;}
+        }
+        public int Health
+        {
+            get{return startHealth;}
+            set{startHealth=value;}
+        }
         int mood;
-        public int Health {get;set;}
+       
         public int AmountUpdate{get;set;}
-        bool active =true;
         public VirtualPet(PetClass petClass,string name,int hunger,int mood)
         {
             this.petClass=petClass;
             Name=name;
             startHunger=hunger;
             startMood=mood;
-            Health=5;
+            startHealth=50;
         }
-         public void Initialise()
+         public  void Initialise()
         {
             AmountUpdate=1;
             hunger=startHunger;   
             mood=startMood;
-
+            health=startHealth;
         }
 
-        public void Update()
+        public  void Update()
         {
-            if(mood>0 && hunger>0)
+            if(mood>0)
             {
                 mood-=AmountUpdate;
+                
+            }
+            if(hunger>0)
+            {
+                if(hunger >70)
+                { 
+                     health-=AmountUpdate;
+                     hunger+=AmountUpdate;
+                     if(health<0)
+                     health=0;
+                }
                 hunger+=AmountUpdate;
             }
 
         }
-
         public void Display()
         {
-            if (active)
-            {
-                Console.SetCursorPosition(5, 4);
-                Console.Write(AmountUpdate);
-                Console.SetCursorPosition(6, 4);
-                Console.Write(hunger);
-                Console.SetCursorPosition(7,4);
-                Console.Write(mood);
-            }
+            Console.CursorVisible = false;
+            Console.SetCursorPosition(5,5);
+            Console.WriteLine($" Name Type Mood Hunger Health");
+            Console.SetCursorPosition(5,7);
+            Console.WriteLine($" {Name} {petClass}  {mood}   {hunger}     {health}");
         }
-        public virtual void DisplayPetInfo()
-        {
-            Console.Write("\n\tYour " + petClass + ", " + Name +"\n\n");
-            Console.WriteLine("\n");
-        } 
     }
 }
